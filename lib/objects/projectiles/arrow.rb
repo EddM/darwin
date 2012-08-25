@@ -7,4 +7,8 @@ class Arrow < Projectile
     @range = 200
   end
   
+  def draw
+    super
+  end
+  
 end

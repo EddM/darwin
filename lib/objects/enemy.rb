@@ -1,5 +1,7 @@
 class Enemy < GameObject
 
+  MinSpawnDistance = 100
+  SpawnRange = 250
   JumpBackDistance = 150
   Speed = 1
   

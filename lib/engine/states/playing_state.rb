@@ -12,9 +12,8 @@ class PlayingState < GameState
   
   def update
     if (Gosu::milliseconds - @last_spawn) >= @spawn_frequency
-      puts 'spawn?'
       @last_spawn = Gosu::milliseconds
-      spawn_zombie! unless rand(4) == 0
+      spawn_zombie! unless rand(5) == 0
     end
     
     @player.update
@@ -25,18 +24,18 @@ class PlayingState < GameState
   
   def spawn_zombie!(x = nil, y = nil)
     unless @enemies.size >= Game::MaxEnemies
-      puts 'spawning'
       x, y = random_coordinates unless x && y
       @enemies << Enemy.new(x, y, self, @player)
     end
   end
   
   def level_up!
-    @spawn_frequency -= 750
+    @spawn_frequency -= 500
   end
   
   def draw
     draw_hud
+    draw_debug
     
     $window.translate(-@camera.first, -@camera.last) do
       draw_background
@@ -49,14 +48,17 @@ class PlayingState < GameState
   private
   
   def random_coordinates
-    # at least 100 pixels away, no more than 400 pixels
-    rand_x, rand_y = rand(300) + 100, rand(300) + 100
+    rand_x = rand(Enemy::SpawnRange) + Enemy::MinSpawnDistance
+    rand_y = rand(Enemy::SpawnRange) + Enemy::MinSpawnDistance
     rand_x = rand(2) == 0 ? (@player.right + rand_x) : (@player.x - rand_x)
     rand_y = rand(2) == 0 ? (@player.bottom + rand_y) : (@player.y - rand_y)
     [rand_x, rand_y]
   end
   
   def draw_hud
+  end
+  
+  def draw_debug
     $window.debug_font.draw "Sprint: #{@player.sprint}", 10, 10, Z::HUD
     $window.debug_font.draw "Tired: #{@player.tired}", 10, 30, Z::HUD
     $window.debug_font.draw "XP: #{@player.experience}/#{@player.xp_required}", 10, 50, Z::HUD
