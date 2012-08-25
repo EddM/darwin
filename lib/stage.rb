@@ -6,26 +6,11 @@ class Stage
   
   def initialize(player)
     @player = player
-    @has_projectile = false
-    @range = 0
-    @speed = 2
+    @speed = 3
   end
   
   def attack!
-    unless @has_projectile
-      enemies = @player.enemies_in_range(@range)
-      puts enemies
-      apply_attack(enemies.first) if enemies.any?
-    else
-      
-    end
-  end
-  
-  def apply_attack
-    raise "Didn't implement #apply_attack"
-  end
-  
-  def update
+    raise "Didn't implement #attack!"
   end
   
   def draw

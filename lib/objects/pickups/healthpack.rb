@@ -1,9 +1,9 @@
-class DNA < Pickup
+class Healthpack < Pickup
   
-  DebugColor = Gosu::Color::GREEN
+  DebugColor = Gosu::Color::RED
   
   def apply!(player)
-    player.xp!(100)
+    player.heal!
   end
   
   def draw

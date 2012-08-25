@@ -10,4 +10,8 @@ class Pickup < GameObject
     @rot += 1
   end
   
+  def apply!(player)
+    raise "Didn't implement #apply!"
+  end
+  
 end

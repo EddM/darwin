@@ -24,8 +24,11 @@ require './lib/stages/super_man.rb'
 require './lib/game_object.rb'
 require './lib/objects/enemy.rb'
 require './lib/objects/player.rb'
+require './lib/objects/projectile.rb'
+require './lib/objects/arrow.rb'
 
 require './lib/objects/pickup.rb'
 require './lib/objects/pickups/dna.rb'
+require './lib/objects/pickups/healthpack.rb'
 
 GameWindow.new.show

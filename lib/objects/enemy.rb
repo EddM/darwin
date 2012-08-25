@@ -1,15 +1,16 @@
 class Enemy < GameObject
 
-  JumpBackDistance = 200
+  JumpBackDistance = 150
+  Speed = 1
   
   attr_reader :speed, :damage
   
-  def initialize(x, y, player, speed = 1)
+  def initialize(x, y, game_state, player, speed = 1)
     super(x, y)
     @player = player
-    @speed = speed
     @damage = 25
-    @hp = 100
+    @hp = 50 + (rand(6) * 10)
+    @game_state = game_state
   end
   
   def dead?
@@ -48,20 +49,20 @@ class Enemy < GameObject
   def move_x
     if @player.x < @x
       @facing_x = :left
-      @x -= @speed
+      @x -= Speed
     elsif @player.x > @x
       @facing_x = :right
-      @x += @speed
+      @x += Speed
     end
   end
   
   def move_y
     if @player.y < @y
       @facing_y = :top
-      @y -= @speed
+      @y -= Speed
     elsif @player.y > @y
       @facing_y = :bottom
-      @y += @speed
+      @y += Speed
     end
   end
   
@@ -69,11 +70,21 @@ class Enemy < GameObject
     @jumping_back = JumpBackDistance
   end
   
+  def draw
+    super
+    $window.debug_font.draw "#{@hp} HP", @x + 5, @y + 15, Z::HUD
+  end
+  
   def update
     if alive?
       move
     else
-      
+      if @opacity <= 0
+        @game_state.pickups << DNA.new(@x, @y)
+        @game_state.enemies.delete(self)
+      else
+        @opacity -= 0.05
+      end
     end
   end
   

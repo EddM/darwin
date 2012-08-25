@@ -3,14 +3,14 @@ class Player < GameObject
   InvincibleTime  = 3000
   Levels          = %w(Neanderthal EarlyMan Warrior ModernMan Ninja SuperMan)
   
-  attr_reader :max_health, :health_remaining, :experience, :level, :score
+  attr_reader :max_health, :health_remaining, :experience, :level, :score, :sprint, :tired, :evolving, :stage
   
   def initialize(x, y, game_state)
     super(x, y)
-    @experience, @kills, @score = 0, 0, 0
-    @level, @speed = 0, 1
-    @max_health, @health_remaining = 100, 100
     @game_state = game_state
+    @experience, @kills, @score, @level = 0, 0, 0, 0
+    @max_health, @health_remaining = 100, 100
+    @sprint, @tired = 100, 0
     @facing = :right
     
     build_stage
@@ -47,34 +47,35 @@ class Player < GameObject
   end
     
   def xp_required
-    1000 * (@level ** 2)
+    1000 * ((@level + 1) ** 2)
   end
   
   def level_up!
     @level += 1
+    @game_state.level_up!
+    @evolving = 50
   end
   
   def build_stage
     @stage = Kernel.const_get(Levels[@level]).new(self)
   end
   
-  def invincible?
-    @invincible_until && @invincible_until >= Gosu::milliseconds
+  def heal!
+    @health_remaining = @max_health
   end
   
   def hit!(enemy)
     unless invincible?
       hp!(0 - enemy.damage)
-      @invincible_until = Gosu::milliseconds + InvincibleTime
-      enemy.damage!(30)
-      enemy.jump_back!
+      invincible!(InvincibleTime)
+      enemy.damage!(enemy.damage)
     end
+    
+    enemy.jump_back!
   end
   
   def attack
-    if $window.button_down?(Gosu::KbSpace)
-      @stage.attack!
-    end
+    @stage.attack! if $window.button_down?(Gosu::MsLeft)
   end
   
   def move
@@ -98,29 +99,54 @@ class Player < GameObject
       @y += speed
     end
     
-    puts "Facing: #{@facing}"
+    sprinting?
   end
   
   def speed
-    @stage.speed
+    if @sprinting
+      @stage.speed * 2
+    else
+      @stage.speed
+    end
   end
   
-  def pickup!(pickup)
-    case pickup
-    when DNA
-      xp!(100)
+  def sprinting?
+    if $window.button_down?(Gosu::KbLeftShift) && @tired <= 0
+      @sprinting = true
+    else
+      @sprinting = false
+      @tired -= 1 unless @tired <= 0
     end
     
-    @game_state.pickups.delete(pickup)
+    if @sprinting
+      @sprint -= 1
+      @tired = 300 if @sprint <= 0
+    else
+      @sprint += 1 unless @sprint >= 100
+    end
+  end
+  
+  def evolve
+    if @evolving
+      @evolving -= 1
+      if @evolving <= 0
+        @evolving = nil
+        build_stage
+      end
+    end
   end
   
   def update
-    move
-    attack
-    check_pickups
-    check_enemies
+    unless @evolving
+      move
+      attack
+      check_pickups
+      check_enemies
+    else
+      evolve
+    end
     
-    puts "XP: #{@experience}"
+    @stage.update
   end
     
   def draw
@@ -136,7 +162,8 @@ class Player < GameObject
   
   def check_pickups
     @game_state.pickups.select { |pickup| pickup.collides?(self) }.each do |pickup|
-      self.pickup!(pickup)
+      pickup.apply!(self)
+      @game_state.pickups.delete(pickup)
     end
   end
     

@@ -13,6 +13,10 @@ class GameWindow < Gosu::Window
     @debug_font = Gosu::Font.new(self, Gosu::default_font_name, 12)
   end
   
+  def needs_cursor?
+    true
+  end
+  
   def update
     self.caption = "Darwin's Odyssey - #{Gosu::fps} fps - #{Gosu::milliseconds}"
     

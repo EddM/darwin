@@ -8,6 +8,15 @@ class GameObject
   def initialize(x, y)
     @x, @y = x, y
     @width, @height = Tile::Size, Tile::Size
+    @opacity = 1.0
+  end
+  
+  def invincible!(ms)
+    @invincible_until = Gosu::milliseconds + ms
+  end
+  
+  def invincible?
+    @invincible_until && @invincible_until >= Gosu::milliseconds
   end
   
   def update
