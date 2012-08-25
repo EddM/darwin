@@ -1,0 +1,2 @@
+class Ninja < Stage
+end

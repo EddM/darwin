@@ -1,0 +1,3 @@
+class Warrior < Stage
+  
+end

@@ -1,6 +1,31 @@
 require 'rubygems'
 require 'gosu'
 
-Dir["**/*.rb"].each { |file| require "./#{file}" }
+require './lib/game.rb'
+require './lib/tile.rb'
+require './lib/z.rb'
+
+require './lib/math/rect.rb'
+
+require './lib/engine/game_window.rb'
+require './lib/engine/game_state.rb'
+require './lib/engine/game_state_manager.rb'
+require './lib/engine/states/menu_state.rb'
+require './lib/engine/states/playing_state.rb'
+
+require './lib/stage.rb'
+require './lib/stages/neanderthal.rb'
+require './lib/stages/early_man.rb'
+require './lib/stages/warrior.rb'
+require './lib/stages/modern_man.rb'
+require './lib/stages/ninja.rb'
+require './lib/stages/super_man.rb'
+
+require './lib/game_object.rb'
+require './lib/objects/enemy.rb'
+require './lib/objects/player.rb'
+
+require './lib/objects/pickup.rb'
+require './lib/objects/pickups/dna.rb'
 
 GameWindow.new.show

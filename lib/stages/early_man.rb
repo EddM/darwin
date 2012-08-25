@@ -1,0 +1,2 @@
+class EarlyMan < Stage
+end
