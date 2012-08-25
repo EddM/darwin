@@ -1,7 +1,7 @@
 class Player < GameObject
   
-  InvincibleTime  = 3000
-  Levels          = %w(Neanderthal EarlyMan Warrior ModernMan Ninja SuperMan)
+  InvincibleTime = 2000
+  Levels = %w(Neanderthal EarlyMan Warrior ModernMan Ninja SuperMan)
   
   attr_reader :max_health, :health_remaining, :experience, :level, :score, :sprint, :tired, :evolving, :stage
   
@@ -23,6 +23,10 @@ class Player < GameObject
   def xp!(n)
     @experience += n
     level_up! if @experience >= xp_required
+  end
+  
+  def score!(n)
+    @score += n
   end
     
   def enemies_in_range(range)
@@ -52,6 +56,7 @@ class Player < GameObject
   
   def level_up!
     @level += 1
+    @score += 1000
     @game_state.level_up!
     @evolving = 50
   end

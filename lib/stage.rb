@@ -13,6 +13,9 @@ class Stage
     raise "Didn't implement #attack!"
   end
   
+  def update
+  end
+  
   def draw
     $window.debug_font.draw self.object_id, @player.x + 5, @player.y + 5, Z::HUD, 1, 1, Gosu::Color::RED
     $window.draw_quad @player.x, @player.y, DebugColor,

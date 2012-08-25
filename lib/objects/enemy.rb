@@ -3,7 +3,7 @@ class Enemy < GameObject
   JumpBackDistance = 150
   Speed = 1
   
-  attr_reader :speed, :damage
+  attr_reader :speed, :damage, :hit_by
   
   def initialize(x, y, game_state, player, speed = 1)
     super(x, y)
@@ -11,6 +11,7 @@ class Enemy < GameObject
     @damage = 25
     @hp = 50 + (rand(6) * 10)
     @game_state = game_state
+    @hit_by = []
   end
   
   def dead?
@@ -80,6 +81,7 @@ class Enemy < GameObject
       move
     else
       if @opacity <= 0
+        @player.score!(500)
         @game_state.pickups << DNA.new(@x, @y)
         @game_state.enemies.delete(self)
       else

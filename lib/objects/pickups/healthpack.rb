@@ -4,6 +4,7 @@ class Healthpack < Pickup
   
   def apply!(player)
     player.heal!
+    player.score!(50)
   end
   
   def draw

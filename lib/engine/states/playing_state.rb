@@ -8,9 +8,6 @@ class PlayingState < GameState
     @enemies, @pickups = [], []
     @spawn_frequency = 4000 # 4 sec.
     @last_spawn = 0
-    
-    @pickups << DNA.new(200, 200)
-    @pickups << Healthpack.new(900, 900)
   end
   
   def update
@@ -64,6 +61,7 @@ class PlayingState < GameState
     $window.debug_font.draw "Tired: #{@player.tired}", 10, 30, Z::HUD
     $window.debug_font.draw "XP: #{@player.experience}/#{@player.xp_required}", 10, 50, Z::HUD
     $window.debug_font.draw "HP: #{@player.health_remaining}/#{@player.max_health}", 10, 70, Z::HUD
+    $window.debug_font.draw "Score: #{@player.score}", 10, 90, Z::HUD
   end
   
   def draw_background

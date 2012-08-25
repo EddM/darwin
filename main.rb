@@ -26,6 +26,8 @@ require './lib/objects/enemy.rb'
 require './lib/objects/player.rb'
 require './lib/objects/projectile.rb'
 require './lib/objects/arrow.rb'
+require './lib/objects/bullet.rb'
+require './lib/objects/throwing_star.rb'
 
 require './lib/objects/pickup.rb'
 require './lib/objects/pickups/dna.rb'

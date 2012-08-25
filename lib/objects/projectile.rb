@@ -20,10 +20,11 @@ class Projectile < GameObject
   end
   
   def check_collision
-    colliding_enemies = $window.state_manager.current.enemies.select { |enemy| enemy.collides?(self) }
+    colliding_enemies = $window.state_manager.current.enemies.select { |enemy| enemy.collides?(self) && !enemy.hit_by.index(self) }
     if colliding_enemies.any?
       enemy = colliding_enemies.first
       enemy.damage!(@damage)
+      enemy.hit_by << self
       enemy.jump_back! unless enemy.dead?
       die!
     end
@@ -39,7 +40,7 @@ class Projectile < GameObject
   private
   
   def die!
-    @player.stage.reload
+    @player.stage.reload if @player.stage.respond_to?(:reload)
   end
   
 end

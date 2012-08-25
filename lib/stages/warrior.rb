@@ -15,9 +15,6 @@ class Warrior < Stage
     enemy.jump_back! unless enemy.dead?
   end
   
-  def update
-  end
-  
   def draw
     super
   end
