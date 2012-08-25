@@ -20,6 +20,14 @@ class RecapState < GameState
       
       @rendered_text.text = "Score #{@score.to_s}"
     end
+    
+    if $window.button_down?(Gosu::KbReturn)
+      if @score == @player.score
+        $window.state_manager.pop($window.state_manager.stack.size - 1)
+      else
+        @score = @player.score
+      end
+    end
   end
   
   def draw

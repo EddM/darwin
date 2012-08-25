@@ -1,5 +1,7 @@
 class GameStateManager
   
+  attr_reader :stack
+  
   def initialize
     @stack = []
   end
@@ -17,8 +19,8 @@ class GameStateManager
   end
   alias :<< :push
   
-  def pop
-    @stack.pop
+  def pop(n = 1)
+    n.times { @stack.pop }
   end
   
 end

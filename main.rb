@@ -15,7 +15,9 @@ require './lib/engine/states/menu_state.rb'
 require './lib/engine/states/playing_state.rb'
 require './lib/engine/states/dialog_state.rb'
 require './lib/engine/states/recap_state.rb'
+require './lib/engine/states/high_scores_state.rb'
 
+require './lib/graphics/button.rb'
 require './lib/graphics/rendered_text.rb'
 
 require './lib/stage.rb'

@@ -1,0 +1,2 @@
+class HighScoresState < GameState
+end

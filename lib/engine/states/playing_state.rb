@@ -8,6 +8,7 @@ class PlayingState < GameState
     @enemies, @pickups = [], []
     @spawn_frequency = 4000 # 4 sec.
     @last_spawn = 0
+    move_camera
   end
   
   def update
@@ -43,7 +44,7 @@ class PlayingState < GameState
     $window.state_manager.push DialogState.new("Game Over", "", Proc.new {
       $window.state_manager.pop
       $window.state_manager.push RecapState.new(@player)
-    });
+    })
   end
   
   def draw

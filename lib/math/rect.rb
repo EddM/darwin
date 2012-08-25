@@ -4,6 +4,10 @@ module Rect
     !(rect.x > right || rect.right < @x || rect.y > bottom || rect.bottom < @y )
   end
   
+  def intersects_point?(x, y)
+    x > @x && x < self.right && y > @y && y < self.bottom
+  end
+  
   def intersects_line?(x1, y1, x2, y2)
     t0 = 0.0
     t1 = 1.0

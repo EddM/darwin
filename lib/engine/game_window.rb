@@ -9,8 +9,7 @@ class GameWindow < Gosu::Window
     
     @audio_manager = AudioManager.new
     @state_manager = GameStateManager.new
-#    @state_manager << MenuState.new
-    @state_manager << PlayingState.new
+    @state_manager << MenuState.new
     @debug_font = Gosu::Font.new(self, Gosu::default_font_name, 12)
   end
   
