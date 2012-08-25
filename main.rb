@@ -8,6 +8,7 @@ require './lib/z.rb'
 require './lib/math/rect.rb'
 
 require './lib/engine/game_window.rb'
+require './lib/engine/audio_manager.rb'
 require './lib/engine/game_state.rb'
 require './lib/engine/game_state_manager.rb'
 require './lib/engine/states/menu_state.rb'

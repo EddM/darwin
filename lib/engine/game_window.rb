@@ -1,12 +1,13 @@
 class GameWindow < Gosu::Window
   
-  attr_reader :state_manager, :debug_font
+  attr_reader :state_manager, :debug_font, :audio_manager
   
   def initialize(width = 640, height = 480)
     super(width, height, false)
     $window = self
     self.caption = "Darwin's Odyssey"
     
+    @audio_manager = AudioManager.new
     @state_manager = GameStateManager.new
 #    @state_manager << MenuState.new
     @state_manager << PlayingState.new
