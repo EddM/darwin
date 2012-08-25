@@ -8,6 +8,10 @@ class GameStateManager
     @stack[-1]
   end
   
+  def previous
+    @stack[-2]
+  end
+  
   def push(state)
     @stack << state
   end

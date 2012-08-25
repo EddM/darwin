@@ -2,11 +2,12 @@ class Stage
   
   DebugColor = Gosu::Color::WHITE
   
-  attr_reader :speed
+  attr_reader :speed, :max_health
   
   def initialize(player)
     @player = player
     @speed = 3
+    @max_health = 100
   end
   
   def attack!
@@ -21,7 +22,7 @@ class Stage
     $window.draw_quad @player.x, @player.y, DebugColor,
                       @player.x + @player.width, @player.y, DebugColor,
                       @player.x, @player.y + @player.height, DebugColor,
-                      @player.x + @player.width, @player.y + @player.height, DebugColor
+                      @player.x + @player.width, @player.y + @player.height, DebugColor, Z::Player
   end
   
 end

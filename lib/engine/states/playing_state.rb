@@ -3,7 +3,7 @@ class PlayingState < GameState
   attr_reader :enemies, :pickups, :camera
   
   def initialize
-    @player = Player.new(0, 0, self)
+    @player = Player.new($window.width / 2, $window.height / 2, self)
     @ground_tile = Gosu::Image.new($window, "res/ground.png", true, 0, 0, 64, 64)
     @enemies, @pickups = [], []
     @spawn_frequency = 4000 # 4 sec.
@@ -11,9 +11,14 @@ class PlayingState < GameState
   end
   
   def update
+    unless @seen_dialog
+      $window.state_manager.push DialogState.new("Level #{@player.level + 1}", @player.stage.to_s)
+      @seen_dialog = true
+    end
+    
     if (Gosu::milliseconds - @last_spawn) >= @spawn_frequency
       @last_spawn = Gosu::milliseconds
-      spawn_zombie! unless rand(5) == 0
+      spawn_zombie!
     end
     
     @player.update
@@ -30,7 +35,15 @@ class PlayingState < GameState
   end
   
   def level_up!
-    @spawn_frequency -= 500
+    @spawn_frequency -= 750
+    $window.state_manager.push DialogState.new("Level #{@player.level + 1}", @player.stage.to_s)
+  end
+  
+  def die!
+    $window.state_manager.push DialogState.new("Game Over", "", Proc.new {
+      $window.state_manager.pop
+      $window.state_manager.push RecapState.new(@player)
+    });
   end
   
   def draw

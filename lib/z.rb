@@ -2,10 +2,12 @@ module Z
   
   # Playing
   Background = 0
-  Items = 1
-  Player = 2
-  Enemy = 2
+  Effects = 1
+  Items = 2
+  Player = 3
+  Enemy = 3
   HUD = 99
+  UI = 101
   
   # Menus
   

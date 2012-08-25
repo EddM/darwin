@@ -10,7 +10,7 @@ class Enemy < GameObject
   def initialize(x, y, game_state, player, speed = 1)
     super(x, y)
     @player = player
-    @damage = 25
+    @damage = 250
     @hp = 50 + (rand(6) * 10)
     @game_state = game_state
     @hit_by = []
@@ -73,6 +73,12 @@ class Enemy < GameObject
     @jumping_back = JumpBackDistance
   end
   
+  def braaaaains
+    if rand(250) == 0
+      $window.audio_manager.play_at_distance! :"brains#{rand(2) + 1}", [@player.x, @player.y], [@x, @y], 500
+    end
+  end
+  
   def draw
     super
     $window.debug_font.draw "#{@hp} HP", @x + 5, @y + 15, Z::HUD
@@ -81,6 +87,7 @@ class Enemy < GameObject
   def update
     if alive?
       move
+      braaaaains
     else
       if @opacity <= 0
         @player.score!(500)

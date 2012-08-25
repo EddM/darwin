@@ -3,7 +3,7 @@ class Player < GameObject
   InvincibleTime = 2000
   Levels = %w(Neanderthal EarlyMan Warrior ModernMan Ninja SuperMan)
   
-  attr_reader :max_health, :health_remaining, :experience, :level, :score, :sprint, :tired, :evolving, :stage
+  attr_reader :max_health, :health_remaining, :experience, :level, :score, :sprint, :tired, :evolving, :stage, :game_state
   
   def initialize(x, y, game_state)
     super(x, y)
@@ -18,11 +18,16 @@ class Player < GameObject
   
   def hp!(n)
     @health_remaining += n
+    if @health_remaining <= 0
+      @game_state.die!
+    end
   end
   
   def xp!(n)
-    @experience += n
-    level_up! if @experience >= xp_required
+    unless @level == (Levels.size - 1)
+      @experience += n
+      level_up! if @experience >= xp_required
+    end
   end
   
   def score!(n)
@@ -30,7 +35,7 @@ class Player < GameObject
   end
     
   def enemies_in_range(range)
-    return case @facing
+    return case attacking_direction
     when :right
       @game_state.enemies.select do |e| 
         (e.x > @x && e.x < (self.right + range)) && (e.bottom > @y || e.y < self.bottom)
@@ -51,14 +56,18 @@ class Player < GameObject
   end
     
   def xp_required
-    1000 * ((@level + 1) ** 2)
+    750 * ((@level + 1) ** 2)
   end
   
   def level_up!
     @level += 1
+    build_stage
     @score += 1000
     @game_state.level_up!
     @evolving = 50
+    @max_health = @stage.max_health
+    heal!
+    $window.audio_manager.play! :evolve
   end
   
   def build_stage
@@ -71,6 +80,7 @@ class Player < GameObject
   
   def hit!(enemy)
     unless invincible?
+      $window.audio_manager.play! :hurt
       hp!(0 - enemy.damage)
       invincible!(InvincibleTime)
       enemy.damage!(enemy.damage)
@@ -81,6 +91,27 @@ class Player < GameObject
   
   def attack
     @stage.attack! if $window.button_down?(Gosu::MsLeft)
+  end
+  
+  def attacking_direction
+    mouse_x, mouse_y = @game_state.camera[0] + $window.mouse_x, @game_state.camera[1] + $window.mouse_y
+    
+    distance_from_x = (mouse_x - mid_point_x).abs
+    distance_from_y = (mouse_y - mid_point_y).abs
+    
+    if distance_from_x > distance_from_y
+      if mouse_x > mid_point_x
+        :right
+      else mouse_x < mid_point_x
+        :left
+      end
+    else
+      if mouse_y > mid_point_y
+        :down
+      else mouse_y < mid_point_y
+        :up
+      end
+    end    
   end
   
   def move
@@ -136,7 +167,6 @@ class Player < GameObject
       @evolving -= 1
       if @evolving <= 0
         @evolving = nil
-        build_stage
       end
     end
   end

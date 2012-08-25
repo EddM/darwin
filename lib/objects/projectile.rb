@@ -4,6 +4,7 @@ class Projectile < GameObject
     @player, @angle = player, angle
     @distance, @origin = 0, [@player.mid_point_x, @player.mid_point_y]
     @x, @y = @origin[0], @origin[1]
+    $window.audio_manager.play! :shoot1
     
     @width = @height = 20
   end
@@ -27,6 +28,7 @@ class Projectile < GameObject
       enemy.hit_by << self
       enemy.jump_back! unless enemy.dead?
       die!
+      $window.audio_manager.play! :hit
     end
   end
   

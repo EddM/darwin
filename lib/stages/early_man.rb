@@ -4,6 +4,10 @@ class EarlyMan < Stage
     super(player)
   end
   
+  def to_s
+    "Early Man"
+  end
+  
   def attack!
     mid_point = @player.mid_point
     camera = $window.state_manager.current.camera

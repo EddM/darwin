@@ -8,6 +8,10 @@ class ModernMan < Stage
     @cooldown = 0
   end
   
+  def to_s
+    "Modern Man"
+  end
+  
   def attack!
     mid_point = @player.mid_point
     camera = $window.state_manager.current.camera

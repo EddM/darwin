@@ -7,6 +7,11 @@ class Ninja < Stage
     @stars = []
     @cooldown = 0
     @speed = 5
+    @max_health = 200
+  end
+  
+  def to_s
+    "Ninja"
   end
   
   def attack!

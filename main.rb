@@ -13,6 +13,10 @@ require './lib/engine/game_state.rb'
 require './lib/engine/game_state_manager.rb'
 require './lib/engine/states/menu_state.rb'
 require './lib/engine/states/playing_state.rb'
+require './lib/engine/states/dialog_state.rb'
+require './lib/engine/states/recap_state.rb'
+
+require './lib/graphics/rendered_text.rb'
 
 require './lib/stage.rb'
 require './lib/stages/neanderthal.rb'
@@ -33,5 +37,7 @@ require './lib/objects/projectiles/throwing_star.rb'
 require './lib/objects/pickup.rb'
 require './lib/objects/pickups/dna.rb'
 require './lib/objects/pickups/healthpack.rb'
+
+$mute = false
 
 GameWindow.new.show
