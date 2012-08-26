@@ -8,13 +8,13 @@ Releasy::Project.new do
   verbose
 
   executable "run.rb"
-  files "lib/**/*.rb", "res/**/*.*"
+  files ["run.rb", "lib/**/*.rb", "res/**/*.*"]
   add_link "http://github.com/EddM/darwin", "Darwin's Odyssey on GitHub"
   exclude_encoding
 
   add_build :osx_app do
     url "com.eddm.darwin"
-    wrapper "etc/wrappers/gosu-mac-wrapper.tar.gz"
+    wrapper "etc/wrappers/gosu-mac-wrapper-0.7.44.tar.gz"
     icon "res/icon.icns"
   end
   
