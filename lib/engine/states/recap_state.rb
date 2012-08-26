@@ -58,8 +58,11 @@ class RecapState < GameState
       $window.translate(0, 50) { @score_text.draw }
     end
     
-    @input.draw
-    @submit.draw
+    unless $window.cheat_mode
+      @input.draw
+      @submit.draw
+    end
+    
     @continue.draw
     
     @font.draw "Thanks for submitting your score", ($window.width / 2) - (@font.text_width("Thanks for submitting your score") / 2), 360, 999 if @show_success

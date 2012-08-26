@@ -227,7 +227,7 @@ class Player < GameObject
       move
       attack
       check_pickups
-      check_enemies
+      check_enemies unless $window.cheat_mode
     else
       evolve
     end
