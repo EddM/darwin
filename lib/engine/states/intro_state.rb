@@ -8,7 +8,10 @@ class IntroState < GameState
   
   def update
     @position -= 0.25
-    $window.state_manager.push PlayingState.new if $window.button_down?(Gosu::KbReturn)
+    if $window.button_down?(Gosu::KbReturn)
+      $window.state_manager.push PlayingState.new
+      $window.song.stop
+    end
   end
   
   def draw

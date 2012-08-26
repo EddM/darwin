@@ -2,7 +2,6 @@ class MenuState < GameState
   
   def initialize
     @logo = Gosu::Image.new($window, "res/logo.png", false, 0, 0, 450, 34)
-    
     @buttons = []
     @buttons << Button.new(($window.width / 2) - 118, 300, :new_game, Proc.new {
       $window.state_manager.push IntroState.new
@@ -15,6 +14,7 @@ class MenuState < GameState
     @earth = Gosu::Image.new($window, "res/earth.png", false, 0, 0, 640, 640)
     @position = 150
     @opacity = 0
+    $window.song.play
   end
   
   def update

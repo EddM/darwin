@@ -4,7 +4,7 @@
 #
 class GameWindow < Gosu::Window
   
-  attr_reader :state_manager, :debug_font, :audio_manager
+  attr_reader :state_manager, :debug_font, :audio_manager, :song, :cheat_mode
   
   def initialize(width = 640, height = 480)
     super(width, height, false)
@@ -12,6 +12,7 @@ class GameWindow < Gosu::Window
     self.caption = "Darwin's Odyssey"
     
     @audio_manager = AudioManager.new
+    @song = Gosu::Song.new($window, "res/intro.wav")
     @state_manager = GameStateManager.new
     @state_manager << MenuState.new
     @debug_font = Gosu::Font.new(self, Gosu::default_font_name, 12)
@@ -28,14 +29,7 @@ class GameWindow < Gosu::Window
   def button_down(id)
     @keycodes << id
     @keycodes = @keycodes[-10..-1] if @keycodes.size > 10
-    
-#    if id == Gosu::KbTab then
-#      index = @text_fields.index(self.text_input) || -1
-#      self.text_input = @text_fields[(index + 1) % @text_fields.size]
-#    elsif id == Gosu::MsLeft then
-#      self.text_input = @text_fields.find { |tf| tf.under_point?(mouse_x, mouse_y) }
-#      self.text_input.move_caret(mouse_x) unless self.text_input.nil?
- #   end
+    check_cheat_code
   end
   
   # Update the game's state
@@ -48,6 +42,14 @@ class GameWindow < Gosu::Window
   # Render to screen
   def draw
     @state_manager.current.draw
+  end
+  
+  private
+  
+  def check_cheat_code
+    if @keycodes == []
+      @cheat_mode = true
+    end
   end
   
 end
