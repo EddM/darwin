@@ -12,7 +12,7 @@ class GameWindow < Gosu::Window
     self.caption = "Darwin's Odyssey"
     
     @audio_manager = AudioManager.new
-    @song = Gosu::Sample.new($window, "res/intro.wav")
+    @song = Gosu::Song.new($window, "res/intro.ogg")
     @state_manager = GameStateManager.new
     @state_manager << MenuState.new
     @debug_font = Gosu::Font.new(self, Gosu::default_font_name, 12)
