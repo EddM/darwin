@@ -3,7 +3,8 @@ require 'data_mapper'
 require 'dm-migrations'
 
 dir = "/var/www/scores"
-DataMapper.setup(:default, "sqlite://#{dir}/scores.db")
+DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{dir}/scores.db")
+
 
 class Score
   include DataMapper::Resource
