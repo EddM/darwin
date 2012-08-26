@@ -5,6 +5,7 @@ class PlayingState < GameState
   def initialize
     @player = Player.new(Game::Width / 2, 200, self)
     @background = Gosu::Image.new($window, "res/map.png", true, 0, 0, 6400, 3840)
+    @helptext = Gosu::Image.new($window, "res/press_h_for_help.png", true, 0, 0, 187, 8)
     @enemies, @pickups = [], []
     @spawn_frequency = 4000 # 4 sec.
     @last_spawn = 0
@@ -90,6 +91,7 @@ class PlayingState < GameState
   
   def draw_hud
     @player.hud.draw
+    @helptext.draw 5, ($window.height - 13), Z::HUD
   end
   
   def draw_debug
