@@ -35,7 +35,7 @@ class GameWindow < Gosu::Window
   
   # Update the game's state
   def update
-    self.caption = "Darwin's Odyssey - #{Gosu::fps} FPS"
+    self.caption = "Darwin's Odyssey - #{Gosu::fps} FPS#{" - 'God' Mode" if @cheat_mode}"
     @state_manager.current.update
     exit if button_down?(Gosu::KbEscape)
   end
