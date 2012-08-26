@@ -4,7 +4,7 @@ class SuperMan < Stage
     super(player)
     @laser = Gosu::Image.new($window, "res/laser.png", false, 0, 0, 640, 16)
     @opacity = 0
-    @max_health = 500
+    @max_health = 350
     @damage = 500
   end
   

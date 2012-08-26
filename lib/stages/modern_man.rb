@@ -6,6 +6,7 @@ class ModernMan < Stage
     super(player)
     @bullets = []
     @cooldown = 0
+    @max_health = 200
   end
   
   def to_s

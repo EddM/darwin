@@ -7,6 +7,7 @@ class Warrior < Stage
     @sword_dir = 0
     @sword_h = Gosu::Image.new($window, "res/sword_h.png", false, 0, 0, 50, 14)
     @sword_y = Gosu::Image.new($window, "res/sword_y.png", false, 0, 0, 14, 50)
+    @max_health = 200
   end
   
   def to_s
