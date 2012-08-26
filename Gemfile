@@ -1,0 +1,2 @@
+gem 'releasy'
+gem 'gosu'
