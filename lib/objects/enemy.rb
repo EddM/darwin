@@ -26,6 +26,11 @@ class Enemy < GameObject
   
   def damage!(n)
     @hp -= n
+    die! if dead?
+  end
+  
+  def die!
+    @player.add_kill!
   end
   
   def move

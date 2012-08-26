@@ -1,7 +1,8 @@
 class Projectile < GameObject
   
-  def initialize(player, angle)
+  def initialize(player, angle, state)
     @player, @angle = player, angle
+    @game_state = state
     @distance, @origin = 0, [@player.mid_point_x, @player.mid_point_y]
     @x, @y = @origin[0], @origin[1]
     $window.audio_manager.play! :shoot1
@@ -21,7 +22,7 @@ class Projectile < GameObject
   end
   
   def check_collision
-    colliding_enemies = $window.state_manager.current.enemies.select { |enemy| enemy.collides?(self) && !enemy.hit_by.index(self) }
+    colliding_enemies = @game_state.enemies.select { |enemy| enemy.collides?(self) && !enemy.hit_by.index(self) }
     if colliding_enemies.any?
       enemy = colliding_enemies.first
       enemy.damage!(@damage)

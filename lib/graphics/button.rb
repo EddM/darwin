@@ -22,7 +22,7 @@ class Button
   end
   
   def update
-    if $window.button_down?(Gosu::MsLeft) && hovering? && @callback
+    if ($window.button_down?(Gosu::MsLeft) || $window.button_down?(Gosu::MsRight)) && hovering? && @callback
       @callback.call
     end
   end

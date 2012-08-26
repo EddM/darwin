@@ -30,7 +30,7 @@ class ModernMan < Stage
   
   def fire!(angle)
     unless @cooldown > 0
-      @bullets << Bullet.new(@player, angle)
+      @bullets << Bullet.new(@player, angle, $window.state_manager.current)
       @cooldown = Cooldown
     end
   end

@@ -1,10 +1,11 @@
-class DialogState < GameState
+class DialogState < InexclusiveGameState
   
   def initialize(header, text, callback = nil)
     @header, @text, @callback = header, text, callback
     @opacity, @text_opacity = 0.0, 0.0
     @height = 100
     
+    @skip = Gosu::Image.new($window, "res/skip.png", false, 0, 0, 137, 8)
     @lines = [RenderedText.new(header), RenderedText.new(text)]
   end
   
@@ -17,7 +18,7 @@ class DialogState < GameState
       end
     end
     
-    if $window.button_down?(Gosu::KbReturn)
+    if @opacity >= 0.8 && $window.button_down?(Gosu::KbReturn)
       if @callback
         @callback.call
       else
@@ -27,6 +28,7 @@ class DialogState < GameState
   end
   
   def draw
+    super
     color = Gosu::Color.from_ahsv((255 * @opacity).to_i, 0, 0, 0)
     
     $window.translate 0, 100 do
@@ -37,7 +39,8 @@ class DialogState < GameState
       $window.translate(30, 30) { @lines[0].draw(@text_opacity) }
       $window.translate(30, 55) { @lines[1].draw(@text_opacity) }
     end
-    $window.state_manager.previous.draw
+    
+    @skip.draw($window.width - 142, $window.height - 12, Z::HUD) if @opacity >= 0.5
   end
   
 end

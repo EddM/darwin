@@ -1,11 +1,15 @@
 class GameState
   
+  def exclusive?
+    true
+  end
+  
   def update
     raise "#update not implemented"
   end
   
   def draw
-    raise "#draw not implemented"
+    $window.state_manager.previous.draw unless exclusive?
   end
-  
+    
 end

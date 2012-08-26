@@ -25,7 +25,7 @@ class EarlyMan < Stage
   
   def fire!(angle)
     unless @arrow
-      @arrow = Arrow.new(@player, angle)
+      @arrow = Arrow.new(@player, angle, $window.state_manager.current)
     end
   end
   

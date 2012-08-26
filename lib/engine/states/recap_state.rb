@@ -3,7 +3,12 @@ class RecapState < GameState
   def initialize(player)
     @player = player
     @score = 0
-    @rendered_text = RenderedText.new("Score #{@score}")
+    @kills_text = RenderedText.new("Kills     #{@player.kills}")
+    @time_text =  RenderedText.new("Survived  #{@player.seconds} seconds")
+    @score_text = RenderedText.new("Score     #{@score}")
+    @continue = Button.new(($window.width / 2) - 118, 300, :continue, Proc.new {
+      $window.state_manager.pop($window.state_manager.stack.size - 1)
+    })
   end
   
   def update
@@ -18,16 +23,11 @@ class RecapState < GameState
         end
       end
       
-      @rendered_text.text = "Score #{@score.to_s}"
+      @score_text.text = "Score     #{@score.to_s}"
     end
     
-    if $window.button_down?(Gosu::KbReturn)
-      if @score == @player.score
-        $window.state_manager.pop($window.state_manager.stack.size - 1)
-      else
-        @score = @player.score
-      end
-    end
+    @score = @player.score if $window.button_down?(Gosu::KbReturn)
+    @continue.update
   end
   
   def draw
@@ -38,8 +38,12 @@ class RecapState < GameState
                       Z::Background
 
     $window.translate 50, 50 do
-      @rendered_text.draw
+      $window.translate(0, 0)  { @kills_text.draw }
+      $window.translate(0, 25) { @time_text.draw }
+      $window.translate(0, 50) { @score_text.draw }
     end
+    
+    @continue.draw
   end
   
 end

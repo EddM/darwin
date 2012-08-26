@@ -3,12 +3,13 @@ class Player < GameObject
   InvincibleTime = 2000
   Levels = %w(Neanderthal EarlyMan Warrior ModernMan Ninja SuperMan)
   
-  attr_reader :max_health, :health_remaining, :experience, :level, :score, :sprint, :tired, :evolving, :stage, :game_state
+  attr_reader :max_health, :health_remaining, :experience, :level, :score, :sprint, :tired, :evolving, :stage, :game_state, :kills
   
   def initialize(x, y, game_state)
     super(x, y)
     @game_state = game_state
     @experience, @kills, @score, @level = 0, 0, 0, 0
+    @time, @died_at = Gosu::milliseconds, 0
     @max_health, @health_remaining = 100, 100
     @sprint, @tired = 100, 0
     @facing = :right
@@ -16,9 +17,14 @@ class Player < GameObject
     build_stage
   end
   
+  def seconds
+    ((@died_at - @time) / 1000).to_i
+  end
+  
   def hp!(n)
     @health_remaining += n
     if @health_remaining <= 0
+      die!
       @game_state.die!
     end
   end
@@ -28,6 +34,10 @@ class Player < GameObject
       @experience += n
       level_up! if @experience >= xp_required
     end
+  end
+  
+  def add_kill!
+    @kills += 1
   end
   
   def score!(n)
@@ -53,6 +63,10 @@ class Player < GameObject
         (e.y > self.bottom && e.y < (self.bottom + range)) && (e.right > @x && e.x < self.right)
       end
     end
+  end
+    
+  def die!
+    @died_at = Gosu::milliseconds
   end
     
   def xp_required
@@ -165,9 +179,7 @@ class Player < GameObject
   def evolve
     if @evolving
       @evolving -= 1
-      if @evolving <= 0
-        @evolving = nil
-      end
+      @evolving = nil if @evolving <= 0
     end
   end
   

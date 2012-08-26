@@ -32,7 +32,7 @@ class Ninja < Stage
   
   def fire!(angle)
     unless @cooldown > 0
-      @stars << ThrowingStar.new(@player, angle)
+      @stars << ThrowingStar.new(@player, angle, $window.state_manager.current)
       @cooldown = Cooldown
     end
   end

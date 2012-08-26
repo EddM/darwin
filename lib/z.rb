@@ -8,6 +8,7 @@ module Z
   Enemy = 3
   HUD = 99
   UI = 101
+  Logo = 102
   
   # Menus
   

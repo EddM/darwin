@@ -9,23 +9,26 @@ class PlayingState < GameState
     @spawn_frequency = 4000 # 4 sec.
     @last_spawn = 0
     move_camera
+    place_pickups
   end
   
   def update
     unless @seen_dialog
       $window.state_manager.push DialogState.new("Level #{@player.level + 1}", @player.stage.to_s)
       @seen_dialog = true
-    end
+    else
+      $window.state_manager.push(HelpState.new(@player.stage.class.to_s.downcase.to_sym)) if $window.button_down? Gosu::KbH
+      
+      if (Gosu::milliseconds - @last_spawn) >= @spawn_frequency
+        @last_spawn = Gosu::milliseconds
+        spawn_zombie!
+      end
     
-    if (Gosu::milliseconds - @last_spawn) >= @spawn_frequency
-      @last_spawn = Gosu::milliseconds
-      spawn_zombie!
+      @player.update
+      @enemies.each { |e| e.update } unless @player.evolving
+      @pickups.each { |p| p.update } unless @player.evolving
+      move_camera
     end
-    
-    @player.update
-    @enemies.each { |e| e.update } unless @player.evolving
-    @pickups.each { |p| p.update } unless @player.evolving
-    move_camera
   end
   
   def spawn_zombie!(x = nil, y = nil)
@@ -60,6 +63,13 @@ class PlayingState < GameState
   end
   
   private
+  
+  def place_pickups
+    @pickups << Healthpack.new(50, 50)
+    @pickups << Healthpack.new(Game::Width - 100, 50)
+    @pickups << Healthpack.new(Game::Height - 100, 50)
+    @pickups << Healthpack.new(Game::Height - 100, Game::Width - 100)
+  end
   
   def random_coordinates
     rand_x = rand(Enemy::SpawnRange) + Enemy::MinSpawnDistance

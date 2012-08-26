@@ -18,8 +18,7 @@ class GameWindow < Gosu::Window
   end
   
   def update
-    self.caption = "Darwin's Odyssey - #{Gosu::fps} fps - #{Gosu::milliseconds}"
-    
+    self.caption = "Darwin's Odyssey - #{Gosu::fps} FPS"
     @state_manager.current.update
     exit if button_down?(Gosu::KbEscape)
   end

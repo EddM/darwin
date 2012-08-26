@@ -1,7 +1,7 @@
 class Arrow < Projectile
   
-  def initialize(player, angle)
-    super(player, angle)
+  def initialize(player, angle, state)
+    super(player, angle, state)
     @speed = 6
     @damage = 50
     @range = 200
