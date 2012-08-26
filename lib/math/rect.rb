@@ -61,11 +61,11 @@ module Rect
   end
   
   def bottom
-    @y + @height
+    (@y || 0) + (@height || 0)
   end
   
   def right
-    @x + @width
+    (@x || 0) + (@width || 0)
   end
   
   def mid_point
