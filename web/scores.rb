@@ -18,7 +18,7 @@ DataMapper.finalize
 
 get '/scores' do
   @scores = Score.all(:order => [ :score.desc ], :limit => 10)
-  erb :index
+  @scores.map { |score| "#{score.id},#{score.name},#{score.score}" }.join("\n")
 end
 
 post '/scores' do
