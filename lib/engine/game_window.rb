@@ -31,6 +31,7 @@ class GameWindow < Gosu::Window
     @keycodes << id
     @keycodes = @keycodes[-10..-1] if @keycodes.size > 10
     check_cheat_code
+    puts "KEY: #{id}"
   end
   
   # Update the game's state
@@ -48,7 +49,7 @@ class GameWindow < Gosu::Window
   private
   
   def check_cheat_code
-    if @keycodes == []
+    if @keycodes == [126, 126, 125, 125, 123, 124, 123, 124, 11, 0] || @keycodes == [126, 126, 125, 125, 123, 124, 123, 124, 11, 0]
       @cheat_mode = true
     end
   end
