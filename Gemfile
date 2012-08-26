@@ -1,2 +1,2 @@
-gem 'releasy'
-gem 'gosu'
+#gem 'releasy'
+#gem 'gosu'
