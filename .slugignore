@@ -3,3 +3,6 @@ src
 etc
 pkg
 res
+
+Gemfile
+Gemfile.lock
