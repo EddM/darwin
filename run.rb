@@ -23,6 +23,7 @@ require './lib/engine/states/help_state.rb'
 require './lib/graphics/button.rb'
 require './lib/graphics/hud.rb'
 require './lib/graphics/rendered_text.rb'
+require './lib/graphics/text_input.rb'
 
 require './lib/stage.rb'
 require './lib/stages/neanderthal.rb'

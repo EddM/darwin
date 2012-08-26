@@ -2,7 +2,7 @@ require 'sinatra'
 require 'data_mapper'
 require 'dm-migrations'
 
-dir = "/Users/edd/Desktop"
+dir = "/var/www/scores"
 DataMapper.setup(:default, "sqlite://#{dir}/scores.db")
 
 class Score
@@ -16,10 +16,10 @@ end
 DataMapper.finalize
 
 get '/scores' do
-  @scores = Score.all(:order => [ :score.desc ])
+  @scores = Score.all(:order => [ :score.desc ], :limit => 10)
   erb :index
 end
 
-post '/add_score' do
+post '/scores' do
   @score = Score.create(:name => params['name'], :score => params['score'].to_i, :created_at => Time.now)
 end

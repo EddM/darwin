@@ -24,10 +24,18 @@ class GameWindow < Gosu::Window
   end
   
   # Stores a short array of the latest keypresses
-  # to check for the cheat code.
+  # to check for the cheat code. Pass it on to the text input.
   def button_down(id)
     @keycodes << id
     @keycodes = @keycodes[-10..-1] if @keycodes.size > 10
+    
+#    if id == Gosu::KbTab then
+#      index = @text_fields.index(self.text_input) || -1
+#      self.text_input = @text_fields[(index + 1) % @text_fields.size]
+#    elsif id == Gosu::MsLeft then
+#      self.text_input = @text_fields.find { |tf| tf.under_point?(mouse_x, mouse_y) }
+#      self.text_input.move_caret(mouse_x) unless self.text_input.nil?
+ #   end
   end
   
   # Update the game's state
