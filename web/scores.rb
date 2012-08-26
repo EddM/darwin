@@ -2,9 +2,8 @@ require 'sinatra'
 require 'data_mapper'
 require 'dm-migrations'
 
-dir = "/var/www/scores"
+dir = "/Users/edd/Desktop"
 DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite://#{dir}/scores.db")
-
 
 class Score
   include DataMapper::Resource
