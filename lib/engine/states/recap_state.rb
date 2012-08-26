@@ -79,7 +79,7 @@ class RecapState < GameState
       begin
         @sending = true
     
-        response = Net::HTTP.start('scores.eddmorgan.com', 80) do |http|
+        response = Net::HTTP.start($high_score_url, 80) do |http|
           http.post '/scores', "name=#{name_input_value}&score=#{@player.score}"
         end
       

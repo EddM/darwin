@@ -48,4 +48,6 @@ require './lib/objects/pickups/healthpack.rb'
 $mute = false
 $debug = false
 
+$high_score_url = "quiet-citadel-4128.herokuapp.com"
+
 GameWindow.new.show

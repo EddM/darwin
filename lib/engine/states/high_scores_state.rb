@@ -57,7 +57,7 @@ class HighScoresState < GameState
   def get_scores
     @fetching = true
     
-    response = Net::HTTP.start('scores.eddmorgan.com', 80) do |http|
+    response = Net::HTTP.start($high_score_url, 80) do |http|
       http.get '/scores'
     end    
 
