@@ -8,6 +8,7 @@ class Ninja < Stage
     @cooldown = 0
     @speed = 5
     @max_health = 200
+    @star_image = Gosu::Image.new($window, "res/shuriken.png", false, 0, 0, 32, 32)
   end
   
   def to_s
@@ -32,7 +33,7 @@ class Ninja < Stage
   
   def fire!(angle)
     unless @cooldown > 0
-      @stars << ThrowingStar.new(@player, angle, $window.state_manager.current)
+      @stars << ThrowingStar.new(@player, angle, $window.state_manager.current, @star_image)
       @cooldown = Cooldown
     end
   end

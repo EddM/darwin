@@ -31,11 +31,11 @@ class DialogState < InexclusiveGameState
     super
     color = Gosu::Color.from_ahsv((255 * @opacity).to_i, 0, 0, 0)
     
-    $window.translate 0, 100 do
+    $window.translate(0, ($window.height / 2) - (@height / 2)) do
       $window.draw_quad 0, 0, color,
                         $window.width, 0, color,
-                        0 + @height, 0, color,
-                        0 + @height, $window.width, color, Z::UI
+                        0, @height, color,
+                        $window.width, @height, color, Z::UI
       $window.translate(30, 30) { @lines[0].draw(@text_opacity) }
       $window.translate(30, 55) { @lines[1].draw(@text_opacity) }
     end

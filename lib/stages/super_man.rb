@@ -34,10 +34,10 @@ class SuperMan < Stage
     
     if @opacity > 0 && @angle
       target_x = @player.mid_point_x + Gosu::offset_x(@angle, 640)
-      target_y = @player.mid_point_y + Gosu::offset_y(@angle, 640)
+      target_y = @player.y + 10 + Gosu::offset_y(@angle, 640)
       
       enemies = @player.game_state.enemies.select { |enemy|
-        enemy.intersects_line?(@player.mid_point_x, @player.mid_point_y, target_x, target_y)
+        enemy.intersects_line?(@player.mid_point_x, @player.y + 10, target_x, target_y)
       }.each do |enemy|
         enemy.damage!(@damage)
         enemy.hit_by << self
@@ -50,7 +50,7 @@ class SuperMan < Stage
     super
     
     if @opacity >= 0 && @angle
-      @laser.draw_rot @player.mid_point_x, @player.mid_point_y, Z::Effects, 270 + @angle, 0, 0.5, 1, 1, @color
+      @laser.draw_rot @player.mid_point_x, @player.y + 10, Z::Effects, 270 + @angle, 0, 0.5, 1, 1, @color
     end
   end
   

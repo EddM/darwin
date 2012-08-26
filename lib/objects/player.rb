@@ -1,9 +1,14 @@
+#
+# Player handles player game logic, but its @stage handles
+# evolution-stage-specific logic and drawing
+#
 class Player < GameObject
   
   InvincibleTime = 2000
   Levels = %w(Neanderthal EarlyMan Warrior ModernMan Ninja SuperMan)
   
-  attr_reader :max_health, :health_remaining, :experience, :level, :score, :sprint, :tired, :evolving, :stage, :game_state, :kills
+  attr_reader :max_health, :health_remaining, :experience, :level, :score, :sprint, :tired, 
+    :evolving, :stage, :game_state, :kills, :facing, :hud
   
   def initialize(x, y, game_state)
     super(x, y)
@@ -13,22 +18,28 @@ class Player < GameObject
     @max_health, @health_remaining = 100, 100
     @sprint, @tired = 100, 0
     @facing = :right
+    @hud = HUD.new(self)
     
     build_stage
   end
   
+  # Number of seconds the user survived for
   def seconds
     ((@died_at - @time) / 1000).to_i
   end
   
+  # Give (or take, if passed a negative number) some health
   def hp!(n)
     @health_remaining += n
-    if @health_remaining <= 0
+    if @health_remaining > @max_health
+      @health_remaining = @max_health
+    elsif @health_remaining <= 0
       die!
       @game_state.die!
     end
   end
   
+  # Give user some experience, and level up if needed
   def xp!(n)
     unless @level == (Levels.size - 1)
       @experience += n
@@ -43,7 +54,9 @@ class Player < GameObject
   def score!(n)
     @score += n
   end
-    
+  
+  # Return an array of Enemy objects that are within a given pixel range
+  # at the currently facing compass direction
   def enemies_in_range(range)
     return case attacking_direction
     when :right
@@ -68,7 +81,9 @@ class Player < GameObject
   def die!
     @died_at = Gosu::milliseconds
   end
-    
+  
+  # The amount of experience (dna) required to reach
+  # the next level (evolution stage)
   def xp_required
     750 * ((@level + 1) ** 2)
   end
@@ -88,10 +103,12 @@ class Player < GameObject
     @stage = Kernel.const_get(Levels[@level]).new(self)
   end
   
+  # Restore the player's health
   def heal!
     @health_remaining = @max_health
   end
   
+  # Tell player that it took damage from a given Enemy
   def hit!(enemy)
     unless invincible?
       $window.audio_manager.play! :hurt
@@ -103,10 +120,21 @@ class Player < GameObject
     enemy.jump_back!
   end
   
+  # Attack if mouse clicked
   def attack
     @stage.attack! if $window.button_down?(Gosu::MsLeft)
   end
   
+  def opacity
+    invincible? ? 0.6 : 1.0
+  end
+  
+  # Is the user moving, or at least attempting to move?
+  def moving?
+    $window.button_down?(Gosu::KbS) || $window.button_down?(Gosu::KbD) || $window.button_down?(Gosu::KbW) || $window.button_down?(Gosu::KbA)
+  end
+  
+  # Work out which compass direction the user is trying to attack (pointing their cursor)
   def attacking_direction
     mouse_x, mouse_y = @game_state.camera[0] + $window.mouse_x, @game_state.camera[1] + $window.mouse_y
     
@@ -125,33 +153,41 @@ class Player < GameObject
       else mouse_y < mid_point_y
         :up
       end
-    end    
+    end
   end
   
+  # Would the given coordinate be out of the bounds of the map?
+  def out_of_bounds?(x, y)
+    x >= (Game::Width - Game::Padding) || x <= (0 + Game::Padding) || y >= (Game::Height - Game::Padding) || y <= (0 + Game::Padding)
+  end
+  
+  # Is the user trying to move? Adjust coordinates appropriately
   def move
     if $window.button_down?(Gosu::KbD)
       @facing = :right
-      @x += speed 
+      @x += speed unless out_of_bounds?(@x + speed, @y)
     end
     
     if $window.button_down?(Gosu::KbA)
       @facing = :left
-      @x -= speed
+      @x -= speed unless out_of_bounds?(@x - speed, @y)
     end
     
     if $window.button_down?(Gosu::KbW)
       @facing = :up
-      @y -= speed
+      @y -= speed unless out_of_bounds?(@x, @y - speed)
     end
     
     if $window.button_down?(Gosu::KbS)
       @facing = :down
-      @y += speed
+      @y += speed unless out_of_bounds?(@x, @y + speed)
     end
     
     sprinting?
   end
   
+  # The speed at which the user should move, in pixels per frame.
+  # Doubled if sprinting.
   def speed
     if @sprinting
       @stage.speed * 2
@@ -160,6 +196,8 @@ class Player < GameObject
     end
   end
   
+  # Is the user trying to sprint, and does the player have enough
+  # energy to sprint?
   def sprinting?
     if $window.button_down?(Gosu::KbLeftShift) && @tired <= 0
       @sprinting = true
@@ -176,6 +214,7 @@ class Player < GameObject
     end
   end
   
+  # Evolution animation countdown
   def evolve
     if @evolving
       @evolving -= 1
@@ -193,6 +232,7 @@ class Player < GameObject
       evolve
     end
     
+    @hud.update
     @stage.update
   end
     
@@ -202,11 +242,13 @@ class Player < GameObject
    
   private
   
+  # Take damage if clipping any enemy hitboxes
   def check_enemies
-    colliding_enemies = @game_state.enemies.select { |enemy| enemy.collides?(self) }
+    colliding_enemies = @game_state.enemies.select { |enemy| enemy.alive? && enemy.collides?(self) }
     self.hit!(colliding_enemies[0]) if colliding_enemies.any?
   end
   
+  # Pick up any items the user is clipping
   def check_pickups
     @game_state.pickups.select { |pickup| pickup.collides?(self) }.each do |pickup|
       pickup.apply!(self)

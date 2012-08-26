@@ -2,6 +2,7 @@ class EarlyMan < Stage
   
   def initialize(player)
     super(player)
+    @arrow_image = Gosu::Image.new($window, "res/arrow.png", false, 0, 0, 32, 32)
   end
   
   def to_s
@@ -25,7 +26,7 @@ class EarlyMan < Stage
   
   def fire!(angle)
     unless @arrow
-      @arrow = Arrow.new(@player, angle, $window.state_manager.current)
+      @arrow = Arrow.new(@player, angle, $window.state_manager.current, @arrow_image)
     end
   end
   

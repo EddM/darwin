@@ -5,6 +5,8 @@ class Neanderthal < Stage
     @range = 35
     @bone_swing = 0
     @bone_dir = 0
+    @bone_h = Gosu::Image.new($window, "res/bone_h.png", false, 0, 0, 35, 15)
+    @bone_y = Gosu::Image.new($window, "res/bone_y.png", false, 0, 0, 15, 35)
   end
   
   def to_s
@@ -47,6 +49,7 @@ class Neanderthal < Stage
   
   private
   
+  # Wow, this is ugly. If only I had *49* hours.
   def draw_bone
     if @attack_dir == :right 
       width = @range
@@ -54,31 +57,32 @@ class Neanderthal < Stage
       x = @player.right
       y = @player.mid_point_y - (height / 2)
       pivot = [@player.mid_point_x, @player.mid_point_y]
+      image = @bone_h
     elsif @attack_dir == :left
       width = @range
       height = 15
       x = @player.x - width
       y = @player.mid_point_y - (height / 2)
       pivot = [@player.mid_point_x, @player.mid_point_y]
+      image = @bone_h
     elsif @attack_dir == :up
       width = 15
       height = @range
       x = @player.mid_point_x - (width / 2)
       y = @player.y - height
       pivot = [@player.mid_point_x, @player.mid_point_y]
+      image = @bone_y
     elsif @attack_dir == :down
       width = 15
       height = @range
       x = @player.mid_point_x - (width / 2)
       y = @player.bottom
       pivot = [@player.mid_point_x, @player.mid_point_y]
+      image = @bone_y
     end
 
     $window.rotate @bone_swing, pivot[0], pivot[1] do
-      $window.draw_quad x, y, Gosu::Color::RED,
-                        x + width, y, Gosu::Color::RED,
-                        x, y + height, Gosu::Color::RED,
-                        x + width, y + height, Gosu::Color::RED
+      image.draw x, y, Z::Items
     end
   end
   

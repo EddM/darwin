@@ -5,6 +5,8 @@ class Warrior < Stage
     @range = 50
     @sword_swing = 0
     @sword_dir = 0
+    @sword_h = Gosu::Image.new($window, "res/sword_h.png", false, 0, 0, 50, 14)
+    @sword_y = Gosu::Image.new($window, "res/sword_y.png", false, 0, 0, 14, 50)
   end
   
   def to_s
@@ -47,6 +49,7 @@ class Warrior < Stage
   
   private
   
+  # Also really bad.
   def draw_sword
     if @attack_dir == :right 
       width = @range
@@ -54,31 +57,40 @@ class Warrior < Stage
       x = @player.right
       y = @player.mid_point_y - (height / 2)
       pivot = [@player.mid_point_x, @player.mid_point_y]
+      image = @sword_h
+      flip = false
     elsif @attack_dir == :left
       width = @range
       height = 15
-      x = @player.x - width
+      x = @player.x
       y = @player.mid_point_y - (height / 2)
       pivot = [@player.mid_point_x, @player.mid_point_y]
+      image = @sword_h
+      flip = true
     elsif @attack_dir == :up
       width = 15
       height = @range
       x = @player.mid_point_x - (width / 2)
       y = @player.y - height
       pivot = [@player.mid_point_x, @player.mid_point_y]
+      image = @sword_y
+      flip = false
     elsif @attack_dir == :down
       width = 15
       height = @range
       x = @player.mid_point_x - (width / 2)
-      y = @player.bottom
+      y = @player.bottom + height
       pivot = [@player.mid_point_x, @player.mid_point_y]
+      image = @sword_y
+      flip = true
     end
 
     $window.rotate @sword_swing, pivot[0], pivot[1] do
-      $window.draw_quad x, y, Gosu::Color::RED,
-                        x + width, y, Gosu::Color::RED,
-                        x, y + height, Gosu::Color::RED,
-                        x + width, y + height, Gosu::Color::RED
+      image.draw x, y, Z::Items, flip ? -1 : 1, flip ? -1 : 1
+#      $window.draw_quad x, y, Gosu::Color::RED,
+#                        x + width, y, Gosu::Color::RED,
+#                        x, y + height, Gosu::Color::RED,
+#                        x + width, y + height, Gosu::Color::RED
     end
   end
   

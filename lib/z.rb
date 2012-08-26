@@ -1,6 +1,4 @@
 module Z
-  
-  # Playing
   Background = 0
   Effects = 1
   Items = 2
@@ -9,7 +7,4 @@ module Z
   HUD = 99
   UI = 101
   Logo = 102
-  
-  # Menus
-  
 end

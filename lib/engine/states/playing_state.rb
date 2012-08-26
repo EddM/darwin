@@ -3,8 +3,8 @@ class PlayingState < GameState
   attr_reader :enemies, :pickups, :camera
   
   def initialize
-    @player = Player.new($window.width / 2, $window.height / 2, self)
-    @ground_tile = Gosu::Image.new($window, "res/ground.png", true, 0, 0, 64, 64)
+    @player = Player.new(Game::Width / 2, 200, self)
+    @background = Gosu::Image.new($window, "res/map.png", true, 0, 0, 6400, 3840)
     @enemies, @pickups = [], []
     @spawn_frequency = 4000 # 4 sec.
     @last_spawn = 0
@@ -31,6 +31,8 @@ class PlayingState < GameState
     end
   end
   
+  # Spawn a zombie at given (or random) coordinates
+  # unless too many already exist
   def spawn_zombie!(x = nil, y = nil)
     unless @enemies.size >= Game::MaxEnemies
       x, y = random_coordinates unless x && y
@@ -38,11 +40,14 @@ class PlayingState < GameState
     end
   end
   
+  # Make the difficulty harder for the player
+  # and show them the 'new level' dialog
   def level_up!
     @spawn_frequency -= 750
     $window.state_manager.push DialogState.new("Level #{@player.level + 1}", @player.stage.to_s)
   end
   
+  # Oh noes, player died
   def die!
     $window.state_manager.push DialogState.new("Game Over", "", Proc.new {
       $window.state_manager.pop
@@ -52,7 +57,7 @@ class PlayingState < GameState
   
   def draw
     draw_hud
-    draw_debug
+    draw_debug if $debug
     
     $window.translate(-@camera.first, -@camera.last) do
       draw_background
@@ -64,13 +69,17 @@ class PlayingState < GameState
   
   private
   
+  # Place some healthpacks for the player to get
   def place_pickups
-    @pickups << Healthpack.new(50, 50)
-    @pickups << Healthpack.new(Game::Width - 100, 50)
-    @pickups << Healthpack.new(Game::Height - 100, 50)
-    @pickups << Healthpack.new(Game::Height - 100, Game::Width - 100)
+    healthpack_offset = 200
+    @pickups << Healthpack.new(healthpack_offset, healthpack_offset)
+    @pickups << Healthpack.new(Game::Width - healthpack_offset, healthpack_offset)
+    @pickups << Healthpack.new(Game::Height - healthpack_offset, healthpack_offset)
+    @pickups << Healthpack.new(Game::Height - healthpack_offset, Game::Width - healthpack_offset)
   end
   
+  # Generate some X and Y coordinates that are close to the
+  # player, but not too close
   def random_coordinates
     rand_x = rand(Enemy::SpawnRange) + Enemy::MinSpawnDistance
     rand_y = rand(Enemy::SpawnRange) + Enemy::MinSpawnDistance
@@ -80,6 +89,7 @@ class PlayingState < GameState
   end
   
   def draw_hud
+    @player.hud.draw
   end
   
   def draw_debug
@@ -91,8 +101,11 @@ class PlayingState < GameState
   end
   
   def draw_background
+    @background.draw 0, 0, Z::Background
   end
   
+  # Center the 'camera' on the user, or off-center if
+  # we risk displaying non-game space
   def move_camera
     cam_x = [[@player.x - ($window.width / 2), 0].max, Game::Width - $window.width].min
     cam_y = [[@player.y - ($window.height / 2), 0].max, Game::Height - $window.height].min

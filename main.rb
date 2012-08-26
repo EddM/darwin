@@ -21,6 +21,7 @@ require './lib/engine/states/high_scores_state.rb'
 require './lib/engine/states/help_state.rb'
 
 require './lib/graphics/button.rb'
+require './lib/graphics/hud.rb'
 require './lib/graphics/rendered_text.rb'
 
 require './lib/stage.rb'
@@ -44,5 +45,6 @@ require './lib/objects/pickups/dna.rb'
 require './lib/objects/pickups/healthpack.rb'
 
 $mute = false
+$debug = false
 
 GameWindow.new.show

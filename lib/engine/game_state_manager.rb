@@ -1,9 +1,20 @@
+#
+# Standard stack collection
+#
 class GameStateManager
   
   attr_reader :stack
   
   def initialize
-    @stack = []
+    clear
+  end
+  
+  def clear(state = nil)
+    if state
+      @stack = [state]
+    else
+      @stack = []
+    end
   end
   
   def current

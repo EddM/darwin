@@ -9,12 +9,14 @@ class Bullet < Projectile
     @damage = 50
     @range = 500
     $window.audio_manager.play! :shoot2
-    
-    @width = @height = 20
+    @width, @height = 10, 10
   end
     
   def draw
-    super
+    $window.draw_quad @x, @y, Gosu::Color::BLACK,
+                      @x + 10, @y, Gosu::Color::BLACK,
+                      @x, @y + 10, Gosu::Color::BLACK,
+                      @x + 10, @y + 10, Gosu::Color::BLACK
   end
   
 end

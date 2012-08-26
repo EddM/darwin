@@ -1,3 +1,7 @@
+#
+# Preload all available sounds and queue them up for playback
+# without delay.
+#
 class AudioManager
     
   def initialize
@@ -9,6 +13,7 @@ class AudioManager
     @sounds, @playing_sounds = Hash[*@sounds.flatten], {}
   end
   
+  # Play a given sound, optionally do not play the sound if it is already playing
   def play!(name, exclusive = true, volume = 1.0)
     return if $mute
     name = name.to_sym
@@ -22,6 +27,8 @@ class AudioManager
     end
   end
   
+  # Play the specified sound at a volume depending on how far apart
+  # the two given points are.
   def play_at_distance!(name, point1, point2, threshold = 200, exclusive = true)
     return if $mute
     distance = Gosu::distance(point1[0], point1[1], point2[0], point2[1])

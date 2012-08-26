@@ -18,7 +18,7 @@ class IntroState < GameState
                       0, $window.height, 0xff000000,
                       $window.width, $window.height, 0xff000000,
                       Z::HUD
-    @skip.draw($window.width - 142, $window.height - 12, Z::HUD) if @position <= ($window.height - 100)
+    @skip.draw($window.width - 142, 10, Z::HUD) if @position <= ($window.height - 100)
   end
   
 end

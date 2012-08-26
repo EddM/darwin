@@ -21,6 +21,7 @@ class Projectile < GameObject
     end
   end
   
+  # Apply damage to any enemies this project comes into contact with
   def check_collision
     colliding_enemies = @game_state.enemies.select { |enemy| enemy.collides?(self) && !enemy.hit_by.index(self) }
     if colliding_enemies.any?
@@ -42,6 +43,7 @@ class Projectile < GameObject
   
   private
   
+  # Projectile has expired
   def die!
     @player.stage.reload if @player.stage.respond_to?(:reload)
   end

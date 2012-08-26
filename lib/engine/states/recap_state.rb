@@ -6,8 +6,8 @@ class RecapState < GameState
     @kills_text = RenderedText.new("Kills     #{@player.kills}")
     @time_text =  RenderedText.new("Survived  #{@player.seconds} seconds")
     @score_text = RenderedText.new("Score     #{@score}")
-    @continue = Button.new(($window.width / 2) - 118, 300, :continue, Proc.new {
-      $window.state_manager.pop($window.state_manager.stack.size - 1)
+    @continue = Button.new(($window.width / 2) - 118, 400, :continue, Proc.new {
+      $window.state_manager.clear MenuState.new
     })
   end
   
@@ -26,7 +26,11 @@ class RecapState < GameState
       @score_text.text = "Score     #{@score.to_s}"
     end
     
-    @score = @player.score if $window.button_down?(Gosu::KbReturn)
+    if $window.button_down?(Gosu::KbReturn)
+      @score = @player.score 
+      @score_text.text = "Score     #{@score.to_s}"
+    end
+    
     @continue.update
   end
   

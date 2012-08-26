@@ -17,6 +17,7 @@ class Button
     @image.height
   end
   
+  # Does the mouse point lie over the button's bounds?
   def hovering?
     intersects_point?($window.mouse_x, $window.mouse_y)
   end
