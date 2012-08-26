@@ -1,7 +1,10 @@
-#gem 'releasy'
-#gem 'gosu'
-
 source :rubygems
+
+gem 'releasy'
+gem 'gosu'
+
+# web
+
 gem 'sinatra'
 gem 'data_mapper'
 gem 'dm-migrations'

@@ -17,7 +17,6 @@ class GameWindow < Gosu::Window
     @state_manager << MenuState.new
     @debug_font = Gosu::Font.new(self, Gosu::default_font_name, 12)
     @keycodes = []
-    @cheat_mode = true
   end
   
   # Make sure the cursor appears on screen
@@ -49,7 +48,7 @@ class GameWindow < Gosu::Window
   private
   
   def check_cheat_code
-    if @keycodes == [126, 126, 125, 125, 123, 124, 123, 124, 11, 0] || @keycodes == [126, 126, 125, 125, 123, 124, 123, 124, 11, 0]
+    if @keycodes == [126, 126, 125, 125, 123, 124, 123, 124, 11, 0] || @keycodes == [200, 200, 208, 208, 203, 205, 203, 205, 48, 30]
       @cheat_mode = true
     end
   end
