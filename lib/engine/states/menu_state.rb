@@ -18,7 +18,7 @@ class MenuState < GameState
   end
   
   def update
-    @opacity += 0.005  unless @opacity >= 1.0
+    @opacity += 0.005   unless @opacity >= 1.0
     @position -= 0.5    unless @position <= 0
     @buttons.each { |btn| btn.update }
   end

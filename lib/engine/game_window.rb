@@ -17,6 +17,7 @@ class GameWindow < Gosu::Window
     @state_manager << MenuState.new
     @debug_font = Gosu::Font.new(self, Gosu::default_font_name, 12)
     @keycodes = []
+    @cheat_mode = true
   end
   
   # Make sure the cursor appears on screen
