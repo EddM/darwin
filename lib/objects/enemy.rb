@@ -11,8 +11,7 @@ class Enemy < GameObject
   def initialize(x, y, game_state, player, speed = 1)
     super(x, y)
     @player = player
-#    @damage = 25
-@damage = 500
+    @damage = 25
     @hp = 50 + (rand(6) * 10)
     @game_state = game_state
     @hit_by = []
